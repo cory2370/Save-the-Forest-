@@ -10,5 +10,4 @@ Top 10 Best Regular Show episodes ranked
 9. Duck crisis special
 10. A bunch of fullgrown geese
 
-HM. Js set up the chairs
-HM. Meet the seer
+HM. Just set up the chairs, meet the seer, rigby's graduation day special
