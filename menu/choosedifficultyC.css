@@ -1,95 +1,171 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    background: linear-gradient(135deg, #0a3d12, #2e8b57); /* Darker green gradient */
+    background: linear-gradient(135deg, #0a3d12, #2e8b57);
     color: white;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     animation: fadeIn 1s ease-in-out;
+    overflow-x: hidden;
+}
+
+.page-container {
+    width: 90%;
+    max-width: 800px;
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: slideDown 1s ease-in-out;
 }
 
 h1 {
     font-size: 3rem;
-    margin-top: 50px;
+    margin-top: 0;
+    margin-bottom: 15px;
     text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
-    animation: slideDown 1s ease-in-out;
 }
 
 p {
     font-size: 1.2rem;
-    margin-bottom: 30px;
+    margin: 0;
     animation: fadeIn 1.2s ease-in-out;
 }
 
-/* Add this to your existing CSS file */
 .difficulty-container {
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-    margin-top: 30px;
-    position: relative; /* Add this */
+    gap: 25px;
+    margin: 30px 0;
+    position: relative;
+    z-index: 10;
 }
 
 .difficulty-box {
-    width: 150px;
-    height: 300px;
+    width: 160px;
+    min-height: 220px;
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 15px;
     color: white;
-    font-size: 1.8rem;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
     position: relative;
-    transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
-    z-index: 1; /* Change from 0 to 1 */
+    padding: 20px 10px;
+    z-index: 1;
 }
 
 .difficulty-box:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-    transform: scale(1.05);
-    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.6);
-    z-index: 10; /* Add this to ensure the hovered box is on top */
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    z-index: 100;
 }
 
-.difficulty-info {
+.difficulty-icon {
+    font-size: 3rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.difficulty-box:hover .difficulty-icon {
+    transform: scale(1.1);
+}
+
+.difficulty-text {
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.difficulty-description {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-align: center;
+    padding: 0 5px;
+}
+
+.difficulty-tooltip {
     position: absolute;
-    z-index: 5; /* Change from 1 to 5 */
-    top: 50%;
-    left: 110%;
-    transform: translateY(-50%);
-    width: 200px;
-    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999; /* Ultra-high z-index */
+    width: 250px;
+    background: rgba(0, 0, 0, 0.9);
     color: white;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 18px;
+    border-radius: 15px;
     font-size: 1rem;
     text-align: left;
-    display: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    pointer-events: none; /* Add this to prevent tooltip from interfering with clicks */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+    border: 1px solid rgba(60, 179, 113, 0.4);
+    transform: translateY(-50%) translateX(-20px);
 }
 
-.difficulty-box:hover .difficulty-info {
-    display: block;
+.difficulty-tooltip h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #3cb371;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-#easyBox { background-color: #4caf50; }
-#mediumBox { background-color: #ffcc00; }
-#hardBox { background-color: #f44336; }
-#wrathBox { background-color: #000; color: red; }
+.difficulty-tooltip.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
 
-#easyBox:hover { background-color: #388e3c; }
-#mediumBox:hover { background-color: #e6b800; }
-#hardBox:hover { background-color: #d32f2f; }
-#wrathBox:hover { background-color: #222; }
+.difficulty-info ul {
+    margin: 10px 0 0 0;
+    padding-left: 20px;
+}
+
+.difficulty-info li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+#easyBox { 
+    background: linear-gradient(to bottom, rgba(76, 175, 80, 0.8), rgba(56, 142, 60, 0.8));
+}
+
+#mediumBox { 
+    background: linear-gradient(to bottom, rgba(255, 204, 0, 0.8), rgba(230, 184, 0, 0.8)); 
+}
+
+#hardBox { 
+    background: linear-gradient(to bottom, rgba(244, 67, 54, 0.8), rgba(211, 47, 47, 0.8)); 
+}
+
+#wrathBox { 
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(34, 34, 34, 0.9));
+    border: 1px solid rgba(255, 0, 0, 0.3);
+}
 
 .back2menu {
-    margin-top: 40px;
+    margin-top: 30px;
     text-align: center;
 }
 
@@ -98,17 +174,56 @@ p {
     padding: 12px 25px;
     border: none;
     border-radius: 10px;
-    background-color: #3cb371; /* Medium green */
+    background-color: #3cb371;
     color: white;
     cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 10px rgba(60, 179, 113, 0.4);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .back2menu button:hover {
     background-color: #2e8b57;
     transform: scale(1.05);
-    box-shadow: 0 6px 14px rgba(60, 179, 113, 0.5);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+}
+
+.forest-decoration {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.tree {
+    position: absolute;
+    bottom: 0;
+    background: radial-gradient(circle at bottom, transparent 0%, #2c7744 10%, #1d5b30 60%, #0a3d12 100%);
+    border-radius: 50% 50% 0 0;
+    opacity: 0.4;
+}
+
+.tree-1 {
+    width: 300px;
+    height: 600px;
+    left: -150px;
+    animation: sway 8s ease-in-out infinite alternate;
+}
+
+.tree-2 {
+    width: 400px;
+    height: 800px;
+    right: -200px;
+    animation: sway 10s ease-in-out infinite alternate-reverse;
+}
+
+.tree-3 {
+    width: 200px;
+    height: 400px;
+    left: 70%;
+    bottom: -200px;
+    animation: sway 7s ease-in-out infinite alternate;
 }
 
 @keyframes fadeIn {
@@ -121,7 +236,40 @@ p {
     to { transform: translateY(0); opacity: 1; }
 }
 
-@keyframes pulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.05); }
+@keyframes sway {
+    from { transform: rotate(-2deg); }
+    to { transform: rotate(2deg); }
+}
+
+@keyframes flicker {
+    0% { transform: scaleY(0.9) scaleX(1); opacity: 0.7; }
+    25% { transform: scaleY(1.1) scaleX(0.95); opacity: 0.8; }
+    50% { transform: scaleY(0.95) scaleX(1.05); opacity: 0.6; }
+    75% { transform: scaleY(1.05) scaleX(1); opacity: 0.9; }
+    100% { transform: scaleY(1) scaleX(1); opacity: 0.7; }
+}
+
+@media (max-width: 768px) {
+    .difficulty-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .difficulty-box {
+        width: 220px;
+        min-height: 180px;
+    }
+    
+    .difficulty-tooltip {
+        position: absolute;
+        left: 0;
+        top: 100%;
+        width: 100%;
+        transform: translateY(10px);
+        margin-top: 10px;
+    }
+    
+    .difficulty-tooltip.show {
+        transform: translateY(0);
+    }
 }
