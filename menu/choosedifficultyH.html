@@ -7,35 +7,41 @@
     <link rel="stylesheet" href="choosedifficultyC.css">
 </head>
 <body>
-    <h1>Difficulty Pick</h1>
-    <p>Select a difficulty level to begin your adventure.</p>
+    <div class="forest-decoration">
+        <div class="tree tree-1"></div>
+        <div class="tree tree-2"></div>
+        <div class="tree tree-3"></div>
+    </div>
     
-    <div class="difficulty-container">
-        <div class="difficulty-box" id="easyBox" onclick="location.href='PutHTMLhereLater.html?difficulty=easy'">
-            <span>🌿</span>
-            <div class="difficulty-text">Eco-Friendly</div>
-            <div class="difficulty-info">Pratically easy mode.
+    <div class="page-container">
+        <header>
+            <h1>Difficulty Pick</h1>
+            <p>Select a difficulty level to begin your adventure</p>
+        </header>
+        
+        <div class="difficulty-container" id="difficultyContainer">
+            <div id="easyTooltip" class="difficulty-tooltip">
+                <h3>Eco-Friendly Mode</h3>
+                Perfect for first-time forest savers!
                 <ul>
                     <li>Fire Speed: 3 secs/tree</li>
                     <li>5x5 grid size</li>
                 </ul>
             </div>
-        </div>
-        <div class="difficulty-box" id="mediumBox" onclick="location.href='PutHTMLhereLater.html?difficulty=medium'">
-            <span>🌳</span>
-            <div class="difficulty-text">Sustainable</div>
-            <div class="difficulty-info">It's getting more intense, but it's still <strong>sustainable</strong>
+            
+            <div id="mediumTooltip" class="difficulty-tooltip">
+                <h3>Sustainable Mode</h3>
+                It's getting more intense, but it's still <strong>sustainable.</strong>
                 <ul>
                     <li>Fire Speed: 2.5 secs/tree</li>
                     <li>Sapling pickup spot teleports</li>
                     <li>6x6 grid size</li>
                 </ul>
             </div>
-        </div>
-        <div class="difficulty-box" id="hardBox" onclick="location.href='PutHTMLhereLater.html?difficulty=hard'">
-            <span>🔥</span>
-            <div class="difficulty-text">Drought</div>
-            <div class="difficulty-info">Average day in California
+            
+            <div id="hardTooltip" class="difficulty-tooltip">
+                <h3>Drought Mode</h3>
+                Average day in California
                 <ul>
                     <li>Fire Speed: 2 secs/tree</li>
                     <li>Sapling pickup spot teleports</li>
@@ -43,11 +49,10 @@
                     <li>8x8 grid size</li>
                 </ul>
             </div>
-        </div>
-        <div class="difficulty-box" id="wrathBox" onclick="location.href='PutHTMLhereLater.html?difficulty=wrath'">
-            <span>💀</span>
-            <div class="difficulty-text">Polluted</div>
-            <div class="difficulty-info">This mode is designed for professional speedrunners
+            
+            <div id="wrathTooltip" class="difficulty-tooltip">
+                <h3>Polluted Mode</h3>
+                For the elite firefighters
                 <ul>
                     <li>Fire Speed: 1 sec/tree</li>
                     <li>Sapling pickup spot teleports</li>
@@ -56,11 +61,70 @@
                     <li>12x12 grid size</li>
                 </ul>
             </div>
+        
+            <div class="difficulty-box" id="easyBox" onclick="location.href='PutHTMLhereLater.html?difficulty=easy'" data-tooltip="easyTooltip">
+                <div class="difficulty-icon">🌿</div>
+                <div class="difficulty-text">Eco-Friendly</div>
+                <div class="difficulty-description">Easy</div>
+            </div>
+            
+            <div class="difficulty-box" id="mediumBox" onclick="location.href='PutHTMLhereLater.html?difficulty=medium'" data-tooltip="mediumTooltip">
+                <div class="difficulty-icon">🌳</div>
+                <div class="difficulty-text">Sustainable</div>
+                <div class="difficulty-description">Medium</div>
+            </div>
+            
+            <div class="difficulty-box" id="hardBox" onclick="location.href='PutHTMLhereLater.html?difficulty=hard'" data-tooltip="hardTooltip">
+                <div class="difficulty-icon">🔥</div>
+                <div class="difficulty-text">Drought</div>
+                <div class="difficulty-description">Hard</div>
+                <div class="fire-effect"></div>
+            </div>
+            
+            <div class="difficulty-box" id="wrathBox" onclick="location.href='PutHTMLhereLater.html?difficulty=wrath'" data-tooltip="wrathTooltip">
+                <div class="difficulty-icon">💀</div>
+                <div class="difficulty-text">Polluted</div>
+                <div class="difficulty-description">Extreme</div>
+            </div>
+        </div>
+        
+        <div class="back2menu">
+            <button onclick="location.href='menuH.html'">Back to Menu</button>
         </div>
     </div>
     
-    <div class="back2menu" id="back2menu" onclick="location.href='menuH.html'">
-    <button onclick="location.href='menuH.html'">Back to Menu</button>
-    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const boxes = document.querySelectorAll('.difficulty-box');
+            const container = document.getElementById('difficultyContainer');
+            
+            boxes.forEach((box, index) => {
+                box.style.animation = `fadeIn ${0.5 + index * 0.2}s ease-in-out`;
+                
+                box.addEventListener('mouseenter', function() {
+                    const tooltipId = this.getAttribute('data-tooltip');
+                    const tooltip = document.getElementById(tooltipId);
+                    
+                    if (tooltip) {
+                        const boxRect = this.getBoundingClientRect();
+                        const containerRect = container.getBoundingClientRect();
+                        
+                        tooltip.style.top = (boxRect.top - containerRect.top + boxRect.height/2) + 'px';
+                        tooltip.style.left = (boxRect.right - containerRect.left + 20) + 'px';
+                        
+                        tooltip.classList.add('show');
+                    }
+                });
+                
+                box.addEventListener('mouseleave', function() {
+                    const tooltipId = this.getAttribute('data-tooltip');
+                    const tooltip = document.getElementById(tooltipId);
+                    if (tooltip) {
+                        tooltip.classList.remove('show');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
