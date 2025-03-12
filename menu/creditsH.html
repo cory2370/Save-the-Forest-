@@ -3,84 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forest Guardian - Credits</title>
+    <title>Save the Forest! - Credits</title>
     <link rel="stylesheet" href="creditsC.css">
 </head>
 <body>
-    <h1>Credits</h1>
-    <p>Meet the team behind Forest Guardian!</p>
-    
-    <div class="credits-container">
-        <div class="credits-box" onclick="toggleCredits('quang')">
-            <span>🩷</span>
-            <div class="credits-text">Quang Tung</div>
-        </div>
-        <div class="credits-info" id="quang" style="display: none;">
-            <h3>Ong this is one of the top 5 group leaders of ALL TIME!</h3>
-            <h3>Contributions:</h3>
-            <ul>
-                <li>Frontend Programming (60%)</li>
-                <li>Creative Direction (70%)</li>
-                <li>Group Organizing (80%)</li>
-                <li>Contribution Rating (from other members): 5/5</li>
-            </ul>
+    <script src="creditshandler.js"></script>
+    <div class="page-container">
+        <header>
+            <h1>Credits</h1>
+            <p>Meet the team behind Save the Forest!</p>
+        </header>
+        
+        <div class="credits-container">
+            <div class="credits-wrapper">
+                <div class="credits-box" data-target="quang">
+                    <div class="icon-container">
+                        <span>🩷</span>
+                    </div>
+                    <div class="credits-text">Quang Tung</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="credits-info" id="quang">
+                    <h3>Ong this is one of the top 5 group leaders of ALL TIME!</h3>
+                    <div class="contribution-section">
+                        <h3>Contributions:</h3>
+                        <ul>
+                            <li><span class="skill">Frontend Programming</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 60%"></div>
+                                </div>
+                                <span class="percentage">60%</span>
+                            </li>
+                            <li><span class="skill">Creative Direction</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 70%"></div>
+                                </div>
+                                <span class="percentage">70%</span>
+                            </li>
+                            <li><span class="skill">Group Organizing</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 80%"></div>
+                                </div>
+                                <span class="percentage">80%</span>
+                            </li>
+                            <li><span class="skill">Contribution Rating</span>
+                                <div class="rating">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-text">(from other members): 5/5</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="credits-wrapper">
+                <div class="credits-box" data-target="hung">
+                    <div class="icon-container">
+                        <span>🔥</span>
+                    </div>
+                    <div class="credits-text">Manh Hung</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="credits-info" id="hung">
+                    <h3>He's good at Python, unfortunately for him we're coding with JavaScript.</h3>
+                    <div class="contribution-section">
+                        <h3>Contributions:</h3>
+                        <ul>
+                            <li><span class="skill">Backend Programming</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 10%"></div>
+                                </div>
+                                <span class="percentage">10%</span>
+                            </li>
+                            <li><span class="skill">Playtesting</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 30%"></div>
+                                </div>
+                                <span class="percentage">30%</span>
+                            </li>
+                            <li><span class="skill">Frontend Programming</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 40%"></div>
+                                </div>
+                                <span class="percentage">40%</span>
+                            </li>
+                            <li><span class="skill">Contribution Rating</span>
+                                <div class="rating">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-text">(from group leader): 5/5</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="credits-wrapper">
+                <div class="credits-box" data-target="andrew">
+                    <div class="icon-container">
+                        <span>🌳</span>
+                    </div>
+                    <div class="credits-text">Andrew (Nam Khanh)</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="credits-info" id="andrew">
+                    <h3>The only one in the group who don't know how to code.</h3>
+                    <div class="contribution-section">
+                        <h3>Contributions:</h3>
+                        <ul>
+                            <li><span class="skill">Playtesting/Feedbacks</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 70%"></div>
+                                </div>
+                                <span class="percentage">70%</span>
+                            </li>
+                            <li><span class="skill">Creative Direction</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 20%"></div>
+                                </div>
+                                <span class="percentage">20%</span>
+                            </li>
+                            <li><span class="skill">Group Organizing</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 20%"></div>
+                                </div>
+                                <span class="percentage">20%</span>
+                            </li>
+                            <li><span class="skill">Contribution Rating</span>
+                                <div class="rating">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-text">(from group leader): 5/5</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="credits-wrapper">
+                <div class="credits-box" data-target="chatgpt">
+                    <div class="icon-container">
+                        <span>🤖</span>
+                    </div>
+                    <div class="credits-text">Claude AI</div>
+                    <div class="expand-icon">▼</div>
+                </div>
+                <div class="credits-info" id="chatgpt">
+                    <h3>Claude is better than ChatGPT and that's a fact homie.</h3>
+                    <div class="contribution-section">
+                        <h3>Contributions:</h3>
+                        <ul>
+                            <li><span class="skill">Backend Programming</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 90%"></div>
+                                </div>
+                                <span class="percentage">90%</span>
+                            </li>
+                            <li><span class="skill">Bugfixing</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 100%"></div>
+                                </div>
+                                <span class="percentage">100%</span>
+                            </li>
+                            <li><span class="skill">Creative Direction</span>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 10%"></div>
+                                </div>
+                                <span class="percentage">10%</span>
+                            </li>
+                            <li><span class="skill">Contribution Rating</span>
+                                <div class="rating">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-text">(from group leader): 5/5</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div class="credits-box" onclick="toggleCredits('hung')">
-            <span>🔥</span>
-            <div class="credits-text">Manh Hung</div>
-        </div>
-        <div class="credits-info" id="hung" style="display: none;">
-            <h3>He's good at Python, unfortunately for him we're coding with JavaScript.</h3>
-            <h3>Contributions:</h3>
-            <ul>
-                <li>Backend Programming (10%)</li>
-                <li>Playtesting (30%)</li>
-                <li>Frontend Programming (40%)</li>
-                <li>Contribution Rating (from group leader): 5/5</li>
-            </ul>
-        </div>
-        
-        <div class="credits-box" onclick="toggleCredits('andrew')">
-            <span>🌳</span>
-            <div class="credits-text">Andrew (Nam Khanh)</div>
-        </div>
-        <div class="credits-info" id="andrew" style="display: none;">
-            <h3>The only one in the group who don't know how to code.</h3>
-            <h3>Contributions:</h3>
-            <ul>
-                <li>Playtesting/Feedbacks (70%)</li>
-                <li>Creative Direction (20%)</li>
-                <li>Group Organizing (20%)</li>
-                <li>Contribution Rating (from group leader): 5/5</li>
-            </ul>
-        </div>
-        
-        <div class="credits-box" onclick="toggleCredits('chatgpt')">
-            <span>🤖</span>
-            <div class="credits-text">ChatGPT / Claude Sonnet AI</div>
-        </div>
-        <div class="credits-info" id="chatgpt" style="display: none;">
-            <h3>The core of all groups.</h3>
-            <h3>Contributions:</h3>
-            <ul>
-                <li>Backend Programming (90%)</li>
-                <li>Bugfixing (100%)</li>
-                <li>Creative Direction (10%)</li>
-                <li>Contribution Rating (from group leader): 5/5</li>
-            </ul>
+        <div class="back2menu" onclick="location.href='menuH.html'">
+            <button>Back to Menu</button>
         </div>
     </div>
-    
-    <div class="back2menu" id="back2menu" onclick="location.href='menuH.html'">
-        <button>Back to Menu</button>
-    </div>
-
-    <script>
-        function toggleCredits(id) {
-            const info = document.getElementById(id);
-            info.style.display = info.style.display === 'block' ? 'none' : 'block';
-        }
-    </script>
 </body>
 </html>
