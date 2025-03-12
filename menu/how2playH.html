@@ -1,29 +1,57 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Save the Forest! - How to Play</title>
-    <link rel="stylesheet" href="how2playC.css">
-  </head>
-  <body>
-    <h1>How to Play</h1>
-    <br><br>
-    <h2>Game Objective</h2>
-    <p>A forest is on fire! Save the forest before all healthy trees burn up by picking up saplings and plating new trees to replace burning trees</p>
-    <br><br>
-    <h2>Controls</h2>
-    <ul>
-      <li>W - Move Up 1 Grid</li>
-      <li>A - Move Left 1 Grid</li>
-      <li>S - Move Down 1 Grid</li>
-      <li>D - Move Down 1 Grid</li>
-      <li>Q - Pick Up Sapling</li>
-      <li>E - Place Sapling</li>
-    </ul>
-    <br><br>
-    <div class="back2menu" id="back2menu" onclick="location.href='menuH.html'">
-    <button>Back to Menu</button>
+<!DOCTYPE html> 
+<html lang="en"> 
+  <head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Save the Forest! - How to Play</title> 
+    <link rel="stylesheet" href="how2playC.css"> 
+  </head> 
+  <body> 
+    <div class="container">
+      <h1>How to Play</h1>
+      
+      <div class="content-section">
+        <h2>Game Objective</h2> 
+        <p>A forest is on fire! Save the forest before all healthy trees burn up by picking up saplings and planting new trees to replace burning trees.</p> 
+      </div>
+      
+      <div class="content-section">
+        <h2>Controls</h2> 
+        <div class="controls-container">
+          <div class="controls-column">
+            <div class="control-item">
+              <span class="key">W</span>
+              <span class="action">Move Up 1 Grid</span>
+            </div>
+            <div class="control-item">
+              <span class="key">A</span>
+              <span class="action">Move Left 1 Grid</span>
+            </div>
+            <div class="control-item">
+              <span class="key">S</span>
+              <span class="action">Move Down 1 Grid</span>
+            </div>
+          </div>
+          <div class="controls-column">
+            <div class="control-item">
+              <span class="key">D</span>
+              <span class="action">Move Right 1 Grid</span>
+            </div>
+            <div class="control-item">
+              <span class="key">Q</span>
+              <span class="action">Pick Up Sapling</span>
+            </div>
+            <div class="control-item">
+              <span class="key">E</span>
+              <span class="action">Place Sapling</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="back2menu" onclick="location.href='menuH.html'"> 
+        <button>Back to Menu</button> 
+      </div>
     </div>
-  </body>
+  </body> 
 </html>
