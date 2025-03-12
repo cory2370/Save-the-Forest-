@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Forest! - Choose Difficulty</title>
+    <link rel="stylesheet" href="choosedifficultyC.css">
+</head>
+<body>
+    <h1>Difficulty Pick</h1>
+    <p>Select a difficulty level to begin your adventure.</p>
+    
+    <div class="difficulty-container">
+        <div class="difficulty-box" id="easyBox" onclick="location.href='PutHTMLhereLater.html?difficulty=easy'">
+            <span>🌿</span>
+            <div class="difficulty-text">Eco-Friendly</div>
+            <div class="difficulty-info">Pratically easy mode.
+                <ul>
+                    <li>Fire Speed: 3 secs/tree</li>
+                    <li>5x5 grid size</li>
+                </ul>
+            </div>
+        </div>
+        <div class="difficulty-box" id="mediumBox" onclick="location.href='PutHTMLhereLater.html?difficulty=medium'">
+            <span>🌳</span>
+            <div class="difficulty-text">Sustainable</div>
+            <div class="difficulty-info">It's getting more intense, but it's still <strong>sustainable</strong>
+                <ul>
+                    <li>Fire Speed: 2.5 secs/tree</li>
+                    <li>Sapling pickup spot teleports</li>
+                    <li>6x6 grid size</li>
+                </ul>
+            </div>
+        </div>
+        <div class="difficulty-box" id="hardBox" onclick="location.href='PutHTMLhereLater.html?difficulty=hard'">
+            <span>🔥</span>
+            <div class="difficulty-text">Drought</div>
+            <div class="difficulty-info">Average day in California
+                <ul>
+                    <li>Fire Speed: 2 secs/tree</li>
+                    <li>Sapling pickup spot teleports</li>
+                    <li>5 obstacle blocks</li>
+                    <li>8x8 grid size</li>
+                </ul>
+            </div>
+        </div>
+        <div class="difficulty-box" id="wrathBox" onclick="location.href='PutHTMLhereLater.html?difficulty=wrath'">
+            <span>💀</span>
+            <div class="difficulty-text">Polluted</div>
+            <div class="difficulty-info">This mode is designed for professional speedrunners
+                <ul>
+                    <li>Fire Speed: 1 sec/tree</li>
+                    <li>Sapling pickup spot teleports</li>
+                    <li>20 obstacle blocks</li>
+                    <li>Must click Enter 3 times to pick up sapling</li>
+                    <li>12x12 grid size</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="back2menu" id="back2menu" onclick="location.href='menuH.html'">
+    <button onclick="location.href='menuH.html'">Back to Menu</button>
+    </div>
+</body>
+</html>
