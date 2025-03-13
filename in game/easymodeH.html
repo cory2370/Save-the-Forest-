@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Forest! - Easy Mode</title>
+    <link rel="stylesheet" href="mode.css">
+</head>
+<body data-difficulty="easy">
+    <div class="forest-decoration">
+        <div class="tree tree-1"></div>
+        <div class="tree tree-2"></div>
+        <div class="tree tree-3"></div>
+    </div>
+    
+    <div class="game-container">
+        <div class="game-header">
+            <div class="game-info">
+                <div class="info-item">
+                    <span class="info-label">Trees:</span>
+                    <span id="treesCount" class="info-value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Burning:</span>
+                    <span id="burningCount" class="info-value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Sapling:</span>
+                    <span id="saplingStatus" class="info-value">❌</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="h1-easy">
+            <h1>Save the Forest! - Eco-Friendly</h1>
+        </div>
+
+        <div id="gameGrid" class="game-grid">
+        </div>
+        
+        <div id="gameMessage" class="game-message"></div>
+        
+        <div class="game-buttons">
+            <button id="restartButton" class="game-button">Restart</button>
+            <button id="menuButton" class="game-button" onclick="location.href='../menu/menuH.html'">Menu</button>
+        </div>
+        
+        <div id="countdownOverlay" class="countdown-overlay">
+            <div id="readySection">
+                <div class="countdown-text">Are you ready to save the forest?</div>
+                <button id="readyButton" class="game-button ready-button">Ready!</button>
+            </div>
+            <div id="countdownSection" style="display: none;">
+                <div id="countdownTimer" class="countdown-timer">3</div>
+                <div class="countdown-text">Get Ready!</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <h2 id="gameOverTitle">Game Over</h2>
+            <p id="gameOverMessage">The forest has been lost to the flames!</p>
+            <div class="modal-buttons">
+                <button id="playAgainButton" class="game-button">Play Again</button>
+                <button id="returnMenuButton" class="game-button" onclick="location.href='../menu/menuH.html'">Menu</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
