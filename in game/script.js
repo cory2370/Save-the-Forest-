@@ -7,38 +7,48 @@ const DIFFICULTY_SETTINGS = {
         saplingTeleport: false,
         obstacles: 0,
         keyPressRequirement: 1, 
-        treePercentage: 0.6,
+        treePercentage: 0.75,
         burningPercentage: 0.15
     },
     medium: {
         name: "Sustainable",
         gridSize: 6,
-        burnInterval: 4500, 
+        burnInterval: 4000, 
         saplingTeleport: true,
         obstacles: 0,
         keyPressRequirement: 1,
-        treePercentage: 0.65,
+        treePercentage: 0.75,
         burningPercentage: 0.15
     },
     hard: {
         name: "Drought",
         gridSize: 8,
-        burnInterval: 2000, 
+        burnInterval: 4000, 
         saplingTeleport: true,
         obstacles: 5,
-        keyPressRequirement: 1,
-        treePercentage: 0.7,
+        keyPressRequirement: 2,
+        treePercentage: 0.75,
         burningPercentage: 0.2
     },
     wrath: {
         name: "Polluted",
         gridSize: 12,
-        burnInterval: 2000, 
+        burnInterval: 3000, 
         saplingTeleport: true,
-        obstacles: 20,
+        obstacles: 25,
         keyPressRequirement: 3, 
         treePercentage: 0.75,
         burningPercentage: 0.25
+    },
+    death: {
+        name: "HIDDEN MODE",
+        gridSize: 5,
+        burnInterval: 1000, 
+        saplingTeleport: true,
+        obstacles: 0,
+        keyPressRequirement: 5, 
+        treePercentage: 0.50,
+        burningPercentage: 0.50,
     }
 };
 
@@ -51,12 +61,49 @@ let saplingPosition = { row: 0, col: 0 };
 let initialSaplingPosition = { row: 0, col: 0 }; 
 let hasSapling = false;
 let gameStatus = "starting"; 
-let burnTimer = null;
 let countdownTimer = null;
-let countdown = 5;
+let countdown = 3;
 let healthyTreesCount = 0;
 let burningTreesCount = 0;
 let keyPressCount = 0; 
+let burnTimer = null;
+
+function startGame() {
+    gameStatus = "playing";
+    
+    if (burnTimer !== null) {
+        clearInterval(burnTimer);
+        burnTimer = null;
+    }
+    
+    burnTimer = setInterval(() => {
+        burnRandomTree();
+    }, settings.burnInterval);
+    
+    showMessage(`${settings.name} Mode: Save the forest!`);
+}
+
+function resetGame() {
+    clearInterval(burnTimer);
+    burnTimer = null;
+    
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+    
+    gameOverModal.style.display = "none";
+    initGame();
+}
+
+function endGame(isWin) {
+    gameStatus = isWin ? "won" : "lost";
+
+    if (burnTimer !== null) {
+        clearInterval(burnTimer);
+        burnTimer = null;
+    }
+    
+    gameOverTitle.textContent = isWin ? "Forest Saved!" : "Forest Lost!";
+}
 
 const CELL_TYPES = {
     EMPTY: "empty",
@@ -173,15 +220,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function placePlayer() {
         const gridSize = settings.gridSize;
-        let placed = false;
-        while (!placed) {
-            const row = Math.floor(Math.random() * gridSize);
-            const col = Math.floor(Math.random() * gridSize);
-            if (grid[row][col] === CELL_TYPES.EMPTY) {
-                playerPosition = { row, col };
-                placed = true;
+        
+        const emptyCells = [];
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if (grid[row][col] === CELL_TYPES.EMPTY) {
+                    emptyCells.push({ row, col });
+                }
             }
         }
+        
+        if (emptyCells.length === 0) {
+            let foundCell = false;
+            for (let row = 0; row < gridSize; row++) {
+                for (let col = 0; col < gridSize; col++) {
+                    if (grid[row][col] !== CELL_TYPES.OBSTACLE) {
+                        playerPosition = { row, col };
+                        foundCell = true;
+                        break;
+                    }
+                }
+                if (foundCell) break;
+            }
+            
+            if (!foundCell) {
+                playerPosition = { row: 0, col: 0 };
+            }
+            return;
+        }
+        
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        playerPosition = emptyCells[randomIndex];
     }
 
     function placeSapling() {
@@ -190,21 +259,42 @@ document.addEventListener('DOMContentLoaded', function() {
             saplingPosition = { ...initialSaplingPosition };
             return;
         }
-        let placed = false;
         
-        while (!placed) {
-            const row = Math.floor(Math.random() * gridSize);
-            const col = Math.floor(Math.random() * gridSize);
-            
-            if (grid[row][col] === CELL_TYPES.EMPTY && 
-                (row !== playerPosition.row || col !== playerPosition.col)) {
-                saplingPosition = { row, col };
-                
-                if (!settings.saplingTeleport) {
-                    initialSaplingPosition = { ...saplingPosition };
+        const emptyCells = [];
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if (grid[row][col] === CELL_TYPES.EMPTY && 
+                    (row !== playerPosition.row || col !== playerPosition.col)) {
+                    emptyCells.push({ row, col });
                 }
-                placed = true;
             }
+        }
+        
+        if (emptyCells.length === 0) {
+            let burningExists = false;
+            for (let row = 0; row < gridSize; row++) {
+                for (let col = 0; col < gridSize; col++) {
+                    if (grid[row][col] === CELL_TYPES.BURNING) {
+                        burningExists = true;
+                        break;
+                    }
+                }
+                if (burningExists) break;
+            }
+            
+            if (!burningExists) {
+                endGame(true);
+            } else {
+                endGame(false);
+            }
+            return;
+        }
+        
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        saplingPosition = emptyCells[randomIndex];
+        
+        if (!settings.saplingTeleport) {
+            initialSaplingPosition = { ...saplingPosition };
         }
     }
 
@@ -339,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (grid[newRow][newCol] === CELL_TYPES.OBSTACLE) {
-            showMessage("Can't move there!");
+            showMessage("Can't move there!", 'low');
             // Chicanery
             return;
         }
@@ -355,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (settings.keyPressRequirement > 1) {
             keyPressCount++;
             if (keyPressCount < settings.keyPressRequirement) {
-                showMessage(`Press Q ${settings.keyPressRequirement - keyPressCount} more times to pick up`);
+                showMessage(`Press Q or O ${settings.keyPressRequirement - keyPressCount} more times to pick up`, 'high');
                 return;
             }
             keyPressCount = 0;
@@ -380,7 +470,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function plantSapling() {
         if (gameStatus !== "playing" || !hasSapling) return;
         
-        
         if (grid[playerPosition.row][playerPosition.col] === CELL_TYPES.BURNING) {
             grid[playerPosition.row][playerPosition.col] = CELL_TYPES.TREE;
             hasSapling = false;
@@ -390,7 +479,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!settings.saplingTeleport) {
                 placeSapling();
             }
-            showMessage("Tree saved!");
+            showMessage("Tree saved!", 'normal');
             updateUI();
             
             if (burningTreesCount === 0) {
@@ -406,18 +495,48 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             showMessage("New tree planted!");
             updateUI();
+            
+            if (burningTreesCount === 0) {
+                endGame(true);
+            }
         } else {
-            showMessage("Can't plant here!");
+            showMessage("Can't plant here!", 'low');
         }
     }
     
-    function showMessage(message) {
+    function showMessage(message, importance = 'normal') {
         gameMessageElement.textContent = message;
-        setTimeout(() => {
-            if (gameMessageElement.textContent === message) {
-                gameMessageElement.textContent = "";
-            }
-        }, 3000);
+        
+        if (window.messageTimeout) {
+            clearTimeout(window.messageTimeout);
+        }
+        
+        let duration = 5000;
+        
+        duration += message.length * 50;
+        
+        if (importance === 'high') {
+            duration *= 1.5;
+        } else if (importance === 'low') {
+            duration *= 0.7;
+        }
+        
+        duration = Math.max(3000, Math.min(duration, 8000));
+        
+        gameMessageElement.style.transition = `opacity 0.3s ease`;
+        gameMessageElement.style.opacity = 1;
+        
+        const fadeStartTime = duration - 500;
+        window.messageTimeout = setTimeout(() => {
+            gameMessageElement.style.opacity = 0;
+            
+            setTimeout(() => {
+                if (gameMessageElement.textContent === message) {
+                    gameMessageElement.textContent = "";
+                    gameMessageElement.style.opacity = 1;
+                }
+            }, 500);
+        }, fadeStartTime);
     }
     
     function endGame(isWin) {
@@ -441,15 +560,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const key = event.key.toLowerCase();
         switch (key) {
             case 'w':
+            case 'arrowup':
+                movePlayer('w');
+                break;
             case 'a':
+            case 'arrowleft':
+                movePlayer('a');
+                break;
             case 's':
+            case 'arrowdown':
+                movePlayer('s');
+                break;
             case 'd':
-                movePlayer(key);
+            case 'arrowright':
+                movePlayer('d');
                 break;
             case 'q':
+            case 'o':
                 pickupSapling();
                 break;
             case 'e':
+            case 'p':
                 plantSapling();
                 break;
         }
