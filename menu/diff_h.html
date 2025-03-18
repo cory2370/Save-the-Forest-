@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Forest! - Choose Difficulty</title>
+    <link rel="stylesheet" href="diff_c.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="particles-container">
+        <div class="particle leaf1"></div>
+        <div class="particle leaf2"></div>
+        <div class="particle leaf3"></div>
+        <div class="particle leaf4"></div>
+        <div class="particle leaf5"></div>
+        <div class="particle leaf6"></div>
+        <div class="particle leaf7"></div>
+        <div class="particle leaf8"></div>
+    </div>
+    
+    <div class="forest-decoration">
+        <div class="tree tree-1">
+            <div class="trunk"></div>
+            <div class="foliage"></div>
+        </div>
+        <div class="tree tree-2">
+            <div class="trunk"></div>
+            <div class="foliage"></div>
+        </div>
+        <div class="tree tree-3">
+            <div class="trunk"></div>
+            <div class="foliage"></div>
+        </div>
+        <div class="tree tree-4">
+            <div class="trunk"></div>
+            <div class="foliage"></div>
+        </div>
+        <div class="tree tree-5">
+            <div class="trunk"></div>
+            <div class="foliage"></div>
+        </div>
+    </div>
+    
+    <div class="fire-glow"></div>
+    
+    <div class="main-container">
+        <div class="title-container">
+            <h1 class="game-title">Choose Difficulty</h1>
+            <div class="title-underline"></div>
+            <p class="tagline">Select a challenge level to begin your adventure</p>
+        </div>
+        
+        <div class="difficulty-container" id="difficultyContainer">
+            <div id="easyTooltip" class="difficulty-tooltip">
+                <h3>Eco-Friendly Mode</h3>
+                Perfect for first-time forest savers!
+                <ul>
+                    <li>Fire Speed: 4.5 secs/tree</li>
+                    <li>5×5 grid size</li>
+                    <li>Sapling stays in one place</li>
+                </ul>
+            </div>
+            
+            <div id="mediumTooltip" class="difficulty-tooltip">
+                <h3>Sustainable Mode</h3>
+                It's getting more intense, but it's still <strong>sustainable</strong>.
+                <ul>
+                    <li>Fire Speed: 4 secs/tree</li>
+                    <li>Sapling teleports after pickup</li>
+                    <li>6×6 grid size</li>
+                </ul>
+            </div>
+            
+            <div id="hardTooltip" class="difficulty-tooltip">
+                <h3>Drought Mode</h3>
+                Average day in California.
+                <ul>
+                    <li>Fire Speed: 4 secs/tree</li>
+                    <li>Sapling teleports after pickup</li>
+                    <li>5 obstacles</li>
+                    <li>Must press key twice to pick up sapling</li>
+                    <li>8×8 grid size</li>
+                </ul>
+            </div>
+            
+            <div id="wrathTooltip" class="difficulty-tooltip">
+                <h3>Polluted Mode</h3>
+                For the elite firefighters.
+                <ul>
+                    <li>Fire Speed: 3 secs/tree</li>
+                    <li>Sapling teleports after pickup</li>
+                    <li>20 obstacles</li>
+                    <li>Must press key three times to pick up sapling</li>
+                    <li>12×12 grid size</li>
+                </ul>
+            </div>
+            
+            <div id="customTooltip" class="difficulty-tooltip">
+                <h3>Custom Mode</h3>
+                Create your perfect challenge.
+                <ul>
+                    <li>Adjust grid size, fire speed, and obstacles</li>
+                    <li>Set sapling behavior</li>
+                    <li>Configure key press requirements</li>
+                    <li>Configure tree and burning percentages</li>
+                </ul>
+            </div>
+        
+            <div class="difficulty-box" id="easyBox" onclick="location.href='../in game/easy.html'" data-tooltip="easyTooltip">
+                <div class="difficulty-icon">🌿</div>
+                <div class="difficulty-text">Eco-Friendly</div>
+                <div class="difficulty-description">Easy</div>
+            </div>
+            
+            <div class="difficulty-box" id="mediumBox" onclick="location.href='../in game/mid.html'" data-tooltip="mediumTooltip">
+                <div class="difficulty-icon">🌳</div>
+                <div class="difficulty-text">Sustainable</div>
+                <div class="difficulty-description">Medium</div>
+            </div>
+            
+            <div class="difficulty-box" id="hardBox" onclick="location.href='../in game/hard.html'" data-tooltip="hardTooltip">
+                <div class="difficulty-icon">🔥</div>
+                <div class="difficulty-text">Drought</div>
+                <div class="difficulty-description">Hard</div>
+            </div>
+            
+            <div class="difficulty-box" id="wrathBox" onclick="location.href='../in game/wrath.html'" data-tooltip="wrathTooltip">
+                <div class="difficulty-icon">💀</div>
+                <div class="difficulty-text">Polluted</div>
+                <div class="difficulty-description">Extreme</div>
+            </div>
+            
+            <div class="difficulty-box" id="customBox" onclick="location.href='../in game/custompick.html'" data-tooltip="customTooltip">
+                <div class="difficulty-icon">⚙️</div>
+                <div class="difficulty-text">Custom</div>
+                <div class="difficulty-description">Your Choice</div>
+            </div>
+        </div>
+        
+        <div class="menu-buttons">
+            <button id="backButton" class="menu-button" onclick="location.href='menu_h.html'">
+                <div class="button-content">
+                    <span class="button-icon">🏠</span>
+                    <span class="button-text">Back to Menu</span>
+                </div>
+                <div class="button-shine"></div>
+            </button>
+        </div>
+    </div>
+    
+    <div class="ambient-fireflies">
+        <div class="firefly f1"></div>
+        <div class="firefly f2"></div>
+        <div class="firefly f3"></div>
+        <div class="firefly f4"></div>
+        <div class="firefly f5"></div>
+        <div class="firefly f6"></div>
+        <div class="firefly f7"></div>
+    </div>
+    
+    <script src="diff_j.js"></script>
+</body>
+</html>
