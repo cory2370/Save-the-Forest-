@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Save the Forest! - Hard Mode</title>
-    <link rel="stylesheet" href="mode.css">
+    <title>Save the Forest! - Drought Mode</title>
+    <script src="script.js"></script>
+    <script src="overlayfix.js"></script>
+    <link rel="stylesheet" href="hard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body data-difficulty="hard">
+    <div class="particles-container">
+        <div class="particle dust1"></div>
+        <div class="particle dust2"></div>
+        <div class="particle dust3"></div>
+        <div class="particle dust4"></div>
+        <div class="particle dust5"></div>
+        <div class="particle dust6"></div>
+        <div class="particle dust7"></div>
+        <div class="particle dust8"></div>
+    
     <div class="forest-decoration">
         <div class="tree tree-1"></div>
         <div class="tree tree-2"></div>
@@ -46,7 +61,7 @@
         
         <div class="game-buttons">
             <button id="restartButton" class="game-button">Restart</button>
-            <button id="menuButton" class="game-button" onclick="location.href='../menu/menuH.html'">Menu</button>
+            <button id="menuButton" class="game-button" onclick="location.href='../menu/menu_h.html'">Menu</button>
         </div>
         
         <div id="countdownOverlay" class="countdown-overlay">
@@ -67,11 +82,9 @@
             <p id="gameOverMessage">The forest has been lost to the flames!</p>
             <div class="modal-buttons">
                 <button id="playAgainButton" class="game-button">Play Again</button>
-                <button id="returnMenuButton" class="game-button" onclick="location.href='../menu/menuH.html'">Menu</button>
+                <button id="returnMenuButton" class="game-button" onclick="location.href='../menu/menu_h.html'">Menu</button>
             </div>
         </div>
     </div>
-    
-    <script src="script.js"></script>
 </body>
 </html>
