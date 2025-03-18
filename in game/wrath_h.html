@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Forest! - Polluted</title>
+    <script src="script.js"></script>
+    <script src="overlayfix.js"></script>
+    <link rel="stylesheet" href="wrath.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-difficulty="wrath">
+    <div class="particles-container">
+        <div class="smoke-particle smoke1"></div>
+        <div class="smoke-particle smoke2"></div>
+        <div class="smoke-particle smoke3"></div>
+        <div class="smoke-particle smoke4"></div>
+        <div class="smoke-particle smoke5"></div>
+        <div class="smoke-particle smoke6"></div>
+        <div class="smoke-particle smoke7"></div>
+        <div class="smoke-particle smoke8"></div>
+        
+        <div class="ash-particle ash1"></div>
+        <div class="ash-particle ash2"></div>
+        <div class="ash-particle ash3"></div>
+        <div class="ash-particle ash4"></div>
+        <div class="ash-particle ash5"></div>
+        <div class="ash-particle ash6"></div>
+        <div class="ash-particle ash7"></div>
+        <div class="ash-particle ash8"></div>
+        <div class="ash-particle ash9"></div>
+        <div class="ash-particle ash10"></div>
+        <div class="ash-particle ash11"></div>
+        <div class="ash-particle ash12"></div>
+    </div>
+    
+    <div class="forest-decoration">
+        <div class="dead-tree dead-tree-1">
+            <div class="trunk"></div>
+            <div class="branches"></div>
+        </div>
+        <div class="dead-tree dead-tree-2">
+            <div class="trunk"></div>
+            <div class="branches"></div>
+        </div>
+        <div class="dead-tree dead-tree-3">
+            <div class="trunk"></div>
+            <div class="branches"></div>
+        </div>
+        <div class="dead-tree dead-tree-4">
+            <div class="trunk"></div>
+            <div class="branches"></div>
+        </div>
+    </div>
+    
+    <div class="fire-glow"></div>
+    
+    <div class="game-container">
+        <div class="game-header">
+            <div class="game-info">
+                <div class="info-item">
+                    <span class="info-label">Trees:</span>
+                    <span id="treesCount" class="info-value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Burning:</span>
+                    <span id="burningCount" class="info-value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Sapling:</span>
+                    <span id="saplingStatus" class="info-value">❌</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Obstacles:</span>
+                    <span id="obstaclesCount" class="info-value">20</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="h1-wrath">
+            <h1>Save the Forest! - Polluted</h1>
+        </div>
+
+        <div id="gameGrid" class="game-grid">
+        </div>
+        
+        <div id="gameMessage" class="game-message"></div>
+        
+        <div class="game-buttons">
+            <button id="restartButton" class="game-button">
+                Restart
+                <div class="button-shine"></div>
+            </button>
+            <button id="menuButton" class="game-button" onclick="location.href='../menu/menu_h.html'">
+                Menu
+                <div class="button-shine"></div>
+            </button>
+        </div>
+        
+        <div id="countdownOverlay" class="countdown-overlay">
+            <div id="readySection">
+                <div class="countdown-text">Are you ready to save the forest?</div>
+                <button id="readyButton" class="game-button ready-button">Ready!</button>
+            </div>
+            <div id="countdownSection" style="display: none;">
+                <div id="countdownTimer" class="countdown-timer">3</div>
+                <div class="countdown-text">Get Ready!</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <h2 id="gameOverTitle">Game Over</h2>
+            <p id="gameOverMessage">The forest has been lost to the flames!</p>
+            <div class="modal-buttons">
+                <button id="playAgainButton" class="game-button">
+                    Play Again
+                    <div class="button-shine"></div>
+                </button>
+                <button id="returnMenuButton" class="game-button" onclick="location.href='../menu/menu_h.html'">
+                    Menu
+                    <div class="button-shine"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="ambient-embers">
+        <div class="ember e1"></div>
+        <div class="ember e2"></div>
+        <div class="ember e3"></div>
+        <div class="ember e4"></div>
+        <div class="ember e5"></div>
+        <div class="ember e6"></div>
+        <div class="ember e7"></div>
+        <div class="ember e8"></div>
+        <div class="ember e9"></div>
+    </div>
+</body>
+</html>
