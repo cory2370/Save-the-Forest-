@@ -1,4 +1,3 @@
-
 const DIFFICULTY_SETTINGS = {
     easy: {
         name: "Eco-Friendly",
@@ -27,7 +26,7 @@ const DIFFICULTY_SETTINGS = {
         saplingTeleport: true,
         obstacles: 5,
         keyPressRequirement: 2,
-        treePercentage: 0.75,
+        treePercentage: 0.7,
         burningPercentage: 0.2
     },
     wrath: {
@@ -35,86 +34,299 @@ const DIFFICULTY_SETTINGS = {
         gridSize: 12,
         burnInterval: 3000, 
         saplingTeleport: true,
-        obstacles: 25,
+        obstacles: 20,
         keyPressRequirement: 3, 
         treePercentage: 0.75,
         burningPercentage: 0.25
     },
-    death: {
-        name: "HIDDEN MODE",
-        gridSize: 5,
-        burnInterval: 1000, 
+    custom: {
+        name: "Custom",
+        gridSize: 6,
+        burnInterval: 4000,
         saplingTeleport: true,
         obstacles: 0,
-        keyPressRequirement: 5, 
-        treePercentage: 0.50,
-        burningPercentage: 0.50,
+        keyPressRequirement: 1,
+        treePercentage: 0.75,
+        burningPercentage: 0.15
     }
 };
 
-const currentDifficulty = document.body.getAttribute('data-difficulty') || 'easy';
-const settings = DIFFICULTY_SETTINGS[currentDifficulty] || DIFFICULTY_SETTINGS.easy;
-
-let grid = [];
-let playerPosition = { row: 0, col: 0 };
-let saplingPosition = { row: 0, col: 0 };
-let initialSaplingPosition = { row: 0, col: 0 }; 
-let hasSapling = false;
-let gameStatus = "starting"; 
-let countdownTimer = null;
-let countdown = 3;
-let healthyTreesCount = 0;
-let burningTreesCount = 0;
-let keyPressCount = 0; 
-let burnTimer = null;
-
-function startGame() {
-    gameStatus = "playing";
-    
-    if (burnTimer !== null) {
-        clearInterval(burnTimer);
-        burnTimer = null;
+try {
+    const storedSettings = localStorage.getItem('customGameSettings');
+    if (storedSettings) {
+        DIFFICULTY_SETTINGS.custom = JSON.parse(storedSettings);
     }
-    
-    burnTimer = setInterval(() => {
-        burnRandomTree();
-    }, settings.burnInterval);
-    
-    showMessage(`${settings.name} Mode: Save the forest!`);
+} catch (error) {
+    console.error('Error loading custom settings');
 }
-
-function resetGame() {
-    clearInterval(burnTimer);
-    burnTimer = null;
-    
-    clearInterval(countdownTimer);
-    countdownTimer = null;
-    
-    gameOverModal.style.display = "none";
-    initGame();
-}
-
-function endGame(isWin) {
-    gameStatus = isWin ? "won" : "lost";
-
-    if (burnTimer !== null) {
-        clearInterval(burnTimer);
-        burnTimer = null;
-    }
-    
-    gameOverTitle.textContent = isWin ? "Forest Saved!" : "Forest Lost!";
-}
-
-const CELL_TYPES = {
-    EMPTY: "empty",
-    TREE: "tree",
-    BURNING: "burning",
-    PLAYER: "player", 
-    SAPLING: "sapling",
-    OBSTACLE: "obstacle"
-};
 
 document.addEventListener('DOMContentLoaded', function() {
+    const isSettingsPage = document.querySelector('.config-form') !== null;
+    
+    if (isSettingsPage) {
+        initSettingsPage();
+    } else {
+        initGamePage();
+    }
+});
+
+function initSettingsPage() {
+    const gridSizeSlider = document.getElementById('gridSize');
+    const gridSizeValue = document.getElementById('gridSizeValue');
+    const burnIntervalSlider = document.getElementById('burnInterval');
+    const burnIntervalValue = document.getElementById('burnIntervalValue');
+    const obstaclesSlider = document.getElementById('obstacles');
+    const obstaclesValue = document.getElementById('obstaclesValue');
+    const keyPressSlider = document.getElementById('keyPressRequirement');
+    const keyPressValue = document.getElementById('keyPressRequirementValue');
+    const treePercentageSlider = document.getElementById('treePercentage');
+    const treePercentageValue = document.getElementById('treePercentageValue');
+    const burningPercentageSlider = document.getElementById('burningPercentage');
+    const burningPercentageValue = document.getElementById('burningPercentageValue');
+    const saplingTeleportToggle = document.getElementById('saplingTeleport');
+    
+    const difficultyBar = document.getElementById('difficultyBar');
+    const difficultyDescription = document.getElementById('difficultyDescription');
+    
+    const presetEasyButton = document.getElementById('presetEasy');
+    const presetMediumButton = document.getElementById('presetMedium');
+    const presetHardButton = document.getElementById('presetHard');
+    const presetExtremeButton = document.getElementById('presetExtreme');
+    const startGameButton = document.getElementById('startGameButton');
+    
+    function initializeSettings() {
+        let settings = DIFFICULTY_SETTINGS.custom;
+        
+        try {
+            const savedSettings = localStorage.getItem('customGameSettings');
+            if (savedSettings) {
+                const parsed = JSON.parse(savedSettings);
+                
+                if (parsed.treePercentage <= 1) {
+                    parsed.treePercentage = Math.round(parsed.treePercentage * 100);
+                }
+                if (parsed.burningPercentage <= 1) {
+                    parsed.burningPercentage = Math.round(parsed.burningPercentage * 100);
+                }
+                
+                settings = parsed;
+            }
+        } catch (error) {
+            console.error('Error loading saved settings');
+        }
+        
+        gridSizeSlider.value = settings.gridSize || 6;
+        burnIntervalSlider.value = settings.burnInterval || 4000;
+        obstaclesSlider.value = settings.obstacles || 0;
+        keyPressSlider.value = settings.keyPressRequirement || 1;
+        treePercentageSlider.value = settings.treePercentage || 75;
+        burningPercentageSlider.value = settings.burningPercentage || 15;
+        
+        saplingTeleportToggle.checked = settings.saplingTeleport !== undefined ? settings.saplingTeleport : true;
+        
+        updateAllDisplayedValues();
+    }
+    
+    function updateGridSizeValue() {
+        const size = parseInt(gridSizeSlider.value);
+        gridSizeValue.textContent = `${size} × ${size}`;
+        
+        const maxObstacles = Math.floor(Math.pow(size, 2) * 0.3);
+        obstaclesSlider.max = maxObstacles;
+        
+        if (parseInt(obstaclesSlider.value) > maxObstacles) {
+            obstaclesSlider.value = maxObstacles;
+            updateObstaclesValue();
+        }
+    }
+    
+    function updateBurnIntervalValue() {
+        const interval = parseInt(burnIntervalSlider.value);
+        burnIntervalValue.textContent = `${interval / 1000} seconds`;
+    }
+    
+    function updateObstaclesValue() {
+        obstaclesValue.textContent = obstaclesSlider.value;
+    }
+    
+    function updateKeyPressValue() {
+        keyPressValue.textContent = keyPressSlider.value;
+    }
+    
+    function updateTreePercentageValue() {
+        treePercentageValue.textContent = `${treePercentageSlider.value}%`;
+        
+        const maxBurning = Math.floor(parseInt(treePercentageSlider.value) * 0.5);
+        if (parseInt(burningPercentageSlider.value) > maxBurning) {
+            burningPercentageSlider.value = maxBurning;
+            updateBurningPercentageValue();
+        }
+    }
+    
+    function updateBurningPercentageValue() {
+        burningPercentageValue.textContent = `${burningPercentageSlider.value}%`;
+    }
+    
+    function updateAllDisplayedValues() {
+        updateGridSizeValue();
+        updateBurnIntervalValue();
+        updateObstaclesValue();
+        updateKeyPressValue();
+        updateTreePercentageValue();
+        updateBurningPercentageValue();
+        updateDifficultyMeter();
+    }
+    
+    function updateDifficultyMeter() {
+        const gridSizeFactor = ((parseInt(gridSizeSlider.value) - 4) / 11) * 15;
+        const burnIntervalFactor = ((7000 - parseInt(burnIntervalSlider.value)) / 6000) * 25;
+        const obstaclesFactor = (parseInt(obstaclesSlider.value) / 30) * 20;
+        const keyPressFactor = ((parseInt(keyPressSlider.value) - 1) / 9) * 10;
+        const treePercentageFactor = ((90 - parseInt(treePercentageSlider.value)) / 60) * 10;
+        const burningPercentageFactor = ((parseInt(burningPercentageSlider.value) - 5) / 45) * 15;
+        const teleportFactor = saplingTeleportToggle.checked ? 5 : 0;
+        
+        const difficultyScore = Math.round(
+            gridSizeFactor + 
+            burnIntervalFactor + 
+            obstaclesFactor + 
+            keyPressFactor + 
+            treePercentageFactor + 
+            burningPercentageFactor + 
+            teleportFactor
+        );
+        
+        difficultyBar.style.width = `${difficultyScore}%`;
+        
+        let description;
+        if (difficultyScore < 25) {
+            description = "Beginner friendly - perfect for learning the game";
+        } else if (difficultyScore < 50) {
+            description = "Moderate challenge - good for casual players";
+        } else if (difficultyScore < 75) {
+            description = "Challenging - requires strategy and quick thinking";
+        } else {
+            description = "Extreme difficulty - only for the bravest firefighters!";
+        }
+        
+        difficultyDescription.textContent = description;
+    }
+    
+    function applyPreset(preset) {
+        const settings = DIFFICULTY_SETTINGS[preset];
+        
+        gridSizeSlider.value = settings.gridSize;
+        burnIntervalSlider.value = settings.burnInterval;
+        obstaclesSlider.value = settings.obstacles;
+        keyPressSlider.value = settings.keyPressRequirement;
+        treePercentageSlider.value = settings.treePercentage * 100;
+        burningPercentageSlider.value = settings.burningPercentage * 100;
+        saplingTeleportToggle.checked = settings.saplingTeleport;
+        
+        updateAllDisplayedValues();
+    }
+    
+    function saveSettings() {
+        const settings = {
+            name: "Custom",
+            gridSize: parseInt(gridSizeSlider.value),
+            burnInterval: parseInt(burnIntervalSlider.value),
+            obstacles: parseInt(obstaclesSlider.value),
+            keyPressRequirement: parseInt(keyPressSlider.value),
+            treePercentage: parseInt(treePercentageSlider.value) / 100,
+            burningPercentage: parseInt(burningPercentageSlider.value) / 100,
+            saplingTeleport: saplingTeleportToggle.checked
+        };
+        
+        localStorage.setItem('customGameSettings', JSON.stringify(settings));
+        
+        return settings;
+    }
+    
+    gridSizeSlider.addEventListener('input', function() {
+        updateGridSizeValue();
+        updateDifficultyMeter();
+    });
+    
+    burnIntervalSlider.addEventListener('input', function() {
+        updateBurnIntervalValue();
+        updateDifficultyMeter();
+    });
+    
+    obstaclesSlider.addEventListener('input', function() {
+        updateObstaclesValue();
+        updateDifficultyMeter();
+    });
+    
+    keyPressSlider.addEventListener('input', function() {
+        updateKeyPressValue();
+        updateDifficultyMeter();
+    });
+    
+    treePercentageSlider.addEventListener('input', function() {
+        updateTreePercentageValue();
+        updateDifficultyMeter();
+    });
+    
+    burningPercentageSlider.addEventListener('input', function() {
+        updateBurningPercentageValue();
+        updateDifficultyMeter();
+    });
+    
+    saplingTeleportToggle.addEventListener('change', updateDifficultyMeter);
+    
+    presetEasyButton.addEventListener('click', function() {
+        applyPreset('easy');
+    });
+    
+    presetMediumButton.addEventListener('click', function() {
+        applyPreset('medium');
+    });
+    
+    presetHardButton.addEventListener('click', function() {
+        applyPreset('hard');
+    });
+    
+    presetExtremeButton.addEventListener('click', function() {
+        applyPreset('wrath');
+    });
+    
+    startGameButton.addEventListener('click', function() {
+        saveSettings();
+        window.location.href = '../in game/custom.html';
+    });
+    
+    initializeSettings();
+}
+
+function initGamePage() {
+    const currentDifficulty = document.body.getAttribute('data-difficulty') || 'easy';
+    const settings = DIFFICULTY_SETTINGS[currentDifficulty] || DIFFICULTY_SETTINGS.easy;
+
+    let grid = [];
+    let playerPosition = { row: 0, col: 0 };
+    let saplingPosition = { row: 0, col: 0 };
+    let initialSaplingPosition = { row: 0, col: 0 }; 
+    let hasSapling = false;
+    let gameStatus = "starting"; 
+    let burnTimer = null;
+    let countdownTimer = null;
+    let countdown = 5;
+    let healthyTreesCount = 0;
+    let burningTreesCount = 0;
+    let keyPressCount = 0; 
+    let emptyCells = [];
+    let obstaclesCount = 0;
+
+    const CELL_TYPES = {
+        EMPTY: "empty",
+        TREE: "tree",
+        BURNING: "burning",
+        PLAYER: "player", 
+        SAPLING: "sapling",
+        OBSTACLE: "obstacle"
+    };
+
     const gameGridElement = document.getElementById("gameGrid");
     const countdownOverlay = document.getElementById("countdownOverlay");
     const countdownTimerElement = document.getElementById("countdownTimer");
@@ -128,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const restartButton = document.getElementById("restartButton");
     const playAgainButton = document.getElementById("playAgainButton");
     const readyButton = document.getElementById("readyButton");
+    const obstaclesCountElement = document.getElementById("obstaclesCount");
     
     document.title = `Save the Forest! - ${settings.name} Mode`;
     
@@ -144,6 +357,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function initGame() {
+        if (burnTimer) clearInterval(burnTimer);
+        if (countdownTimer) clearInterval(countdownTimer);
         
         const gridSize = settings.gridSize;
         grid = Array(gridSize).fill().map(() => Array(gridSize).fill(CELL_TYPES.EMPTY));
@@ -151,19 +366,25 @@ document.addEventListener('DOMContentLoaded', function() {
         gameGridElement.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
         gameGridElement.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
         
+        emptyCells = [];
+        obstaclesCount = 0;
+        
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
-                
                 const cell = document.createElement("div");
                 cell.id = `cell-${row}-${col}`;
                 cell.className = "grid-cell cell-empty";
                 gameGridElement.appendChild(cell);
+                
+                emptyCells.push({ row, col });
             }
         }
         
         hasSapling = false;
         gameStatus = "starting";
         keyPressCount = 0;
+        healthyTreesCount = 0;
+        burningTreesCount = 0;
         
         if (settings.obstacles > 0) {
             placeObstacles();
@@ -175,123 +396,135 @@ document.addEventListener('DOMContentLoaded', function() {
         showReadyScreen();
     }
 
-    function placeObstacles() {
-        const gridSize = settings.gridSize;
-        let placedObstacles = 0;
-        while (placedObstacles < settings.obstacles) {
-            const row = Math.floor(Math.random() * gridSize);
-            const col = Math.floor(Math.random() * gridSize);
-            if (grid[row][col] === CELL_TYPES.EMPTY) {
-                grid[row][col] = CELL_TYPES.OBSTACLE;
-                placedObstacles++;
+    window.startGameFunction = function() {
+        gameStatus = "playing";
+        
+        if (burnTimer) clearInterval(burnTimer);
+        
+        burnTimer = setInterval(() => {
+            if (gameStatus === "playing") {
+                burnRandomTree();
             }
+        }, settings.burnInterval);
+        
+        showMessage(`${settings.name} Mode: Save the forest!`);
+    };
+    
+    function startGame() {
+        window.startGameFunction();
+    }
+
+    function removeFromEmptyCells(row, col) {
+        const index = emptyCells.findIndex(cell => cell.row === row && cell.col === col);
+        if (index !== -1) {
+            emptyCells.splice(index, 1);
+        }
+    }
+
+    function getRandomEmptyCell() {
+        if (emptyCells.length === 0) return null;
+        const index = Math.floor(Math.random() * emptyCells.length);
+        return emptyCells[index];
+    }
+
+    function placeObstacles() {
+        let placedObstacles = 0;
+        const maxAttempts = settings.obstacles * 2;
+        let attempts = 0;
+        
+        while (placedObstacles < settings.obstacles && attempts < maxAttempts && emptyCells.length > 0) {
+            attempts++;
+            const randomCell = getRandomEmptyCell();
+            if (!randomCell) break;
+            
+            const { row, col } = randomCell;
+            grid[row][col] = CELL_TYPES.OBSTACLE;
+            removeFromEmptyCells(row, col);
+            placedObstacles++;
+        }
+        
+        obstaclesCount = placedObstacles;
+        if (obstaclesCountElement) {
+            obstaclesCountElement.textContent = obstaclesCount;
         }
     }
 
     function placeInitialTrees() {
-        const gridSize = settings.gridSize;
-        const totalCells = gridSize * gridSize;
-        const obstacleCount = settings.obstacles;
-        const availableCells = totalCells - obstacleCount;
-        const treesCount = Math.floor(availableCells * settings.treePercentage);
+        const availableCells = emptyCells.length;
+        let treesToPlace = Math.floor(availableCells * settings.treePercentage);
         let placedTrees = 0;
-        while (placedTrees < treesCount) {
-            const row = Math.floor(Math.random() * gridSize);
-            const col = Math.floor(Math.random() * gridSize);
-            if (grid[row][col] === CELL_TYPES.EMPTY) {
-                grid[row][col] = CELL_TYPES.TREE;
-                placedTrees++;
+        
+        const maxAttempts = treesToPlace * 2;
+        let attempts = 0;
+        
+        while (placedTrees < treesToPlace && attempts < maxAttempts && emptyCells.length > 0) {
+            attempts++;
+            const randomCell = getRandomEmptyCell();
+            if (!randomCell) break;
+            
+            const { row, col } = randomCell;
+            grid[row][col] = CELL_TYPES.TREE;
+            removeFromEmptyCells(row, col);
+            placedTrees++;
+        }
+        
+        healthyTreesCount = placedTrees;
+        
+        const treePositions = [];
+        const gridSize = settings.gridSize;
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if (grid[row][col] === CELL_TYPES.TREE) {
+                    treePositions.push({ row, col });
+                }
             }
         }
         
-        const burningCount = Math.floor(treesCount * settings.burningPercentage);
+        let burningToPlace = Math.floor(placedTrees * settings.burningPercentage);
         let placedBurning = 0;
-        while (placedBurning < burningCount) {
-            const row = Math.floor(Math.random() * gridSize);
-            const col = Math.floor(Math.random() * gridSize);
-            if (grid[row][col] === CELL_TYPES.TREE) {
-                grid[row][col] = CELL_TYPES.BURNING;
-                placedBurning++;
-            }
+        
+        while (placedBurning < burningToPlace && treePositions.length > 0) {
+            const randomIndex = Math.floor(Math.random() * treePositions.length);
+            const { row, col } = treePositions[randomIndex];
+            
+            grid[row][col] = CELL_TYPES.BURNING;
+            healthyTreesCount--;
+            placedBurning++;
+            
+            treePositions.splice(randomIndex, 1);
         }
-        healthyTreesCount = placedTrees - placedBurning;
+        
         burningTreesCount = placedBurning;
     }
 
     function placePlayer() {
-        const gridSize = settings.gridSize;
-        
-        const emptyCells = [];
-        for (let row = 0; row < gridSize; row++) {
-            for (let col = 0; col < gridSize; col++) {
-                if (grid[row][col] === CELL_TYPES.EMPTY) {
-                    emptyCells.push({ row, col });
-                }
-            }
-        }
-        
         if (emptyCells.length === 0) {
-            let foundCell = false;
-            for (let row = 0; row < gridSize; row++) {
-                for (let col = 0; col < gridSize; col++) {
-                    if (grid[row][col] !== CELL_TYPES.OBSTACLE) {
-                        playerPosition = { row, col };
-                        foundCell = true;
-                        break;
-                    }
-                }
-                if (foundCell) break;
-            }
-            
-            if (!foundCell) {
-                playerPosition = { row: 0, col: 0 };
-            }
             return;
         }
         
-        const randomIndex = Math.floor(Math.random() * emptyCells.length);
-        playerPosition = emptyCells[randomIndex];
+        const randomCell = getRandomEmptyCell();
+        playerPosition = { row: randomCell.row, col: randomCell.col };
+        removeFromEmptyCells(randomCell.row, randomCell.col);
     }
 
     function placeSapling() {
-        const gridSize = settings.gridSize;
-        if (!settings.saplingTeleport && initialSaplingPosition.row !== 0) {
-            saplingPosition = { ...initialSaplingPosition };
-            return;
-        }
-        
-        const emptyCells = [];
-        for (let row = 0; row < gridSize; row++) {
-            for (let col = 0; col < gridSize; col++) {
-                if (grid[row][col] === CELL_TYPES.EMPTY && 
-                    (row !== playerPosition.row || col !== playerPosition.col)) {
-                    emptyCells.push({ row, col });
-                }
-            }
-        }
-        
         if (emptyCells.length === 0) {
-            let burningExists = false;
-            for (let row = 0; row < gridSize; row++) {
-                for (let col = 0; col < gridSize; col++) {
-                    if (grid[row][col] === CELL_TYPES.BURNING) {
-                        burningExists = true;
-                        break;
-                    }
-                }
-                if (burningExists) break;
-            }
-            
-            if (!burningExists) {
-                endGame(true);
-            } else {
-                endGame(false);
-            }
             return;
         }
         
-        const randomIndex = Math.floor(Math.random() * emptyCells.length);
-        saplingPosition = emptyCells[randomIndex];
+        if (!settings.saplingTeleport && initialSaplingPosition.row !== 0) {
+            if (grid[initialSaplingPosition.row][initialSaplingPosition.col] === CELL_TYPES.EMPTY) {
+                saplingPosition = { ...initialSaplingPosition };
+                return;
+            }
+        }
+        
+        const randomCell = getRandomEmptyCell();
+        if (!randomCell) {
+            return;
+        }
+        
+        saplingPosition = { row: randomCell.row, col: randomCell.col };
         
         if (!settings.saplingTeleport) {
             initialSaplingPosition = { ...saplingPosition };
@@ -300,11 +533,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateUI() {
         const gridSize = settings.gridSize;
+        
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
                 const cell = document.getElementById(`cell-${row}-${col}`);
-                cell.classList.remove("cell-empty", "cell-tree", "cell-burning", "cell-player", "cell-sapling", "cell-obstacle");
-                cell.classList.add(`cell-${grid[row][col]}`);
+                
+                cell.className = `grid-cell cell-${grid[row][col]}`;
+                
                 let emoji = "";
                 switch (grid[row][col]) {
                     case CELL_TYPES.TREE:
@@ -325,19 +560,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         const playerCell = document.getElementById(`cell-${playerPosition.row}-${playerPosition.col}`);
-        playerCell.classList.add("cell-player");
-        playerCell.textContent = "🧑‍🚒";
+        if (playerCell) {
+            playerCell.className = "grid-cell cell-player";
+            playerCell.textContent = "🧑‍🚒";
+        }
         
         if (!hasSapling || !settings.saplingTeleport) {
             const saplingCell = document.getElementById(`cell-${saplingPosition.row}-${saplingPosition.col}`);
-            if (saplingCell && !saplingCell.classList.contains("cell-player")) {
-                saplingCell.classList.add("cell-sapling");
+            if (saplingCell && 
+                (playerPosition.row !== saplingPosition.row || 
+                 playerPosition.col !== saplingPosition.col)) {
+                saplingCell.className = "grid-cell cell-sapling";
                 saplingCell.textContent = "🌱";
             }
         }
+        
         treesCountElement.textContent = healthyTreesCount;
         burningCountElement.textContent = burningTreesCount;
         saplingStatusElement.textContent = hasSapling ? "✅" : "❌";
+        
+        if (obstaclesCountElement) {
+            obstaclesCountElement.textContent = obstaclesCount;
+        }
     }
     
     function showReadyScreen() {
@@ -349,17 +593,24 @@ document.addEventListener('DOMContentLoaded', function() {
         countdownSection.style.display = "none";
         countdownOverlay.style.display = "flex";
         
-        document.getElementById("readyButton").addEventListener("click", function() {
+        const readyButton = document.getElementById("readyButton");
+        const newReadyButton = readyButton.cloneNode(true);
+        readyButton.parentNode.replaceChild(newReadyButton, readyButton);
+        
+        newReadyButton.addEventListener("click", function() {
             readySection.style.display = "none";
             countdownSection.style.display = "block";
             startCountdown();
-        }, { once: true }); 
+        });
     }
 
     function startCountdown() {
         gameStatus = "starting";
         countdown = 3;
         document.getElementById("countdownTimer").textContent = countdown;
+        
+        if (countdownTimer) clearInterval(countdownTimer);
+        
         countdownTimer = setInterval(() => {
             countdown--;
             document.getElementById("countdownTimer").textContent = countdown;
@@ -373,23 +624,36 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function startGame() {
         gameStatus = "playing";
+        
+        if (burnTimer) clearInterval(burnTimer);
+        
         burnTimer = setInterval(() => {
-            burnRandomTree();
+            if (gameStatus === "playing") {
+                burnRandomTree();
+            }
         }, settings.burnInterval);
+        
         showMessage(`${settings.name} Mode: Save the forest!`);
     }
 
-    
+    window.startGameFunction = startGame;
+
     function burnRandomTree() {
         if (gameStatus !== "playing" || healthyTreesCount === 0) return;
+        
         const healthyTrees = [];
         const gridSize = settings.gridSize;
-
-        for (let row = 0; row < gridSize; row++) {
-            for (let col = 0; col < gridSize; col++) {
-                if (grid[row][col] === CELL_TYPES.TREE) {
-                    healthyTrees.push({ row, col });
-                }
+        
+        let found = 0;
+        const maxCheck = Math.min(healthyTreesCount, 10);
+        
+        while (found < maxCheck && healthyTrees.length < maxCheck) {
+            const row = Math.floor(Math.random() * gridSize);
+            const col = Math.floor(Math.random() * gridSize);
+            
+            if (grid[row][col] === CELL_TYPES.TREE) {
+                healthyTrees.push({ row, col });
+                found++;
             }
         }
         
@@ -401,6 +665,32 @@ document.addEventListener('DOMContentLoaded', function() {
             burningTreesCount++;
             
             updateUI();
+            
+            if (healthyTreesCount === 0) {
+                endGame(false);
+            }
+        } else if (healthyTreesCount > 0) {
+            const allTrees = [];
+            for (let row = 0; row < gridSize; row++) {
+                for (let col = 0; col < gridSize; col++) {
+                    if (grid[row][col] === CELL_TYPES.TREE) {
+                        allTrees.push({ row, col });
+                    }
+                }
+            }
+            
+            healthyTreesCount = allTrees.length;
+            
+            if (allTrees.length > 0) {
+                const randomIndex = Math.floor(Math.random() * allTrees.length);
+                const { row, col } = allTrees[randomIndex];
+                grid[row][col] = CELL_TYPES.BURNING;
+                healthyTreesCount--;
+                burningTreesCount++;
+                
+                updateUI();
+            }
+            
             if (healthyTreesCount === 0) {
                 endGame(false);
             }
@@ -429,8 +719,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (grid[newRow][newCol] === CELL_TYPES.OBSTACLE) {
-            showMessage("Can't move there!", 'low');
-            // Chicanery
+            showMessage("Can't move there!");
             return;
         }
         
@@ -445,7 +734,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (settings.keyPressRequirement > 1) {
             keyPressCount++;
             if (keyPressCount < settings.keyPressRequirement) {
-                showMessage(`Press Q or O ${settings.keyPressRequirement - keyPressCount} more times to pick up`, 'high');
+                showMessage(`Press Q ${settings.keyPressRequirement - keyPressCount} more times to pick up`);
                 return;
             }
             keyPressCount = 0;
@@ -456,6 +745,10 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage("Sapling collected!");
             
             if (settings.saplingTeleport) {
+                if (grid[saplingPosition.row][saplingPosition.col] === CELL_TYPES.EMPTY) {
+                    removeFromEmptyCells(saplingPosition.row, saplingPosition.col);
+                }
+                
                 grid[saplingPosition.row][saplingPosition.col] = CELL_TYPES.TREE;
                 healthyTreesCount++;
                 placeSapling();
@@ -479,7 +772,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!settings.saplingTeleport) {
                 placeSapling();
             }
-            showMessage("Tree saved!", 'normal');
+            showMessage("Tree saved!");
             updateUI();
             
             if (burningTreesCount === 0) {
@@ -489,59 +782,36 @@ document.addEventListener('DOMContentLoaded', function() {
             grid[playerPosition.row][playerPosition.col] = CELL_TYPES.TREE;
             hasSapling = false;
             healthyTreesCount++;
+            
+            removeFromEmptyCells(playerPosition.row, playerPosition.col);
     
             if (!settings.saplingTeleport) {
                 placeSapling();
             }
             showMessage("New tree planted!");
             updateUI();
-            
-            if (burningTreesCount === 0) {
-                endGame(true);
-            }
         } else {
-            showMessage("Can't plant here!", 'low');
+            showMessage("Can't plant here!");
         }
     }
     
-    function showMessage(message, importance = 'normal') {
+    function showMessage(message) {
         gameMessageElement.textContent = message;
-        
-        if (window.messageTimeout) {
-            clearTimeout(window.messageTimeout);
-        }
-        
-        let duration = 5000;
-        
-        duration += message.length * 50;
-        
-        if (importance === 'high') {
-            duration *= 1.5;
-        } else if (importance === 'low') {
-            duration *= 0.7;
-        }
-        
-        duration = Math.max(3000, Math.min(duration, 8000));
-        
-        gameMessageElement.style.transition = `opacity 0.3s ease`;
-        gameMessageElement.style.opacity = 1;
-        
-        const fadeStartTime = duration - 500;
-        window.messageTimeout = setTimeout(() => {
-            gameMessageElement.style.opacity = 0;
-            
-            setTimeout(() => {
-                if (gameMessageElement.textContent === message) {
-                    gameMessageElement.textContent = "";
-                    gameMessageElement.style.opacity = 1;
-                }
-            }, 500);
-        }, fadeStartTime);
+        setTimeout(() => {
+            if (gameMessageElement.textContent === message) {
+                gameMessageElement.textContent = "";
+            }
+        }, 3000);
     }
     
     function endGame(isWin) {
         gameStatus = isWin ? "won" : "lost";
-        clearInterval(burnTimer);
+        
+        if (burnTimer) {
+            clearInterval(burnTimer);
+            burnTimer = null;
+        }
+        
         gameOverTitle.textContent = isWin ? "Forest Saved!" : "Forest Lost!";
         gameOverMessage.textContent = isWin 
             ? "You've successfully saved all the trees from burning!" 
@@ -550,14 +820,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function resetGame() {
-        clearInterval(burnTimer);
-        clearInterval(countdownTimer);
+        if (burnTimer) {
+            clearInterval(burnTimer);
+            burnTimer = null;
+        }
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+        }
+        
         gameOverModal.style.display = "none";
         initGame();
     }
 
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', handleKeyPress);
+    
+    function handleKeyPress(event) {
         const key = event.key.toLowerCase();
+        
+        if (gameStatus !== "playing") return;
+        
         switch (key) {
             case 'w':
             case 'arrowup':
@@ -584,14 +866,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 plantSapling();
                 break;
         }
-    });
+    }
+
+    function cleanup() {
+        if (burnTimer) {
+            clearInterval(burnTimer);
+            burnTimer = null;
+        }
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+        }
+        document.removeEventListener('keydown', handleKeyPress);
+        window.removeEventListener('resize', positionOverlay);
+        window.removeEventListener('load', positionOverlay);
+        window.removeEventListener('scroll', positionOverlay);
+    }
+
+    window.addEventListener('beforeunload', cleanup);
 
     restartButton.addEventListener('click', resetGame);
     playAgainButton.addEventListener('click', resetGame);
 
-    window.addEventListener('resize', positionOverlay);
-    window.addEventListener('load', positionOverlay);
-    window.addEventListener('scroll', positionOverlay);
-
     initGame();
-});
+}
