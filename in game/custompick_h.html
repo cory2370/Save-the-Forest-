@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Forest! - Custom Settings</title>
+    <link rel="stylesheet" href="custompick_c.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="particles-container" id="particlesContainer">
+        <div class="particle leaf1"></div>
+        <div class="particle leaf2"></div>
+        <div class="particle leaf3"></div>
+        <div class="particle leaf4"></div>
+        <div class="particle leaf5"></div>
+        <div class="particle leaf6"></div>
+        <div class="particle leaf7"></div>
+        <div class="particle leaf8"></div>
+    </div>
+    
+    <div class="forest-decoration">
+        <div class="tree tree-1">
+            <div class="trunk"></div>
+            <div class="foliage"></div>
+        </div>
+        <div class="tree tree-2">
+            <div class="trunk"></div>
+            <div class="foliage"></div>
+        </div>
+        <div class="tree tree-3">
+            <div class="trunk"></div>
+            <div class="foliage"></div>
+        </div>
+    </div>
+    
+    <div class="config-container">
+        <div class="config-header">
+            <h1>Custom Game Settings</h1>
+            <p>Configure your forest-saving adventure!</p>
+        </div>
+        
+        <div class="config-form">
+            <div class="config-section">
+                <h2>Game Board</h2>
+                
+                <div class="config-item">
+                    <label for="gridSize">Grid Size:</label>
+                    <div class="slider-container">
+                        <input type="range" id="gridSize" min="3" max="15" value="6" class="slider">
+                        <span id="gridSizeValue" class="slider-value">6 x 6</span>
+                    </div>
+                </div>
+                
+                <div class="config-item">
+                    <label for="burnInterval">Fire Speed:</label>
+                    <div class="slider-container">
+                        <input type="range" id="burnInterval" min="500" max="8000" step="500" value="4000" class="slider">
+                        <span id="burnIntervalValue" class="slider-value">4 seconds</span>
+                    </div>
+                </div>
+                
+                <div class="config-item">
+                    <label for="obstacles">Obstacles:</label>
+                    <div class="slider-container">
+                        <input type="range" id="obstacles" min="0" max="50" value="0" class="slider">
+                        <span id="obstaclesValue" class="slider-value">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="config-section">
+                <h2>Gameplay Options</h2>
+                
+                <div class="config-item">
+                    <label for="keyPressRequirement">Key Presses to Pick Sapling:</label>
+                    <div class="slider-container">
+                        <input type="range" id="keyPressRequirement" min="1" max="10" value="1" class="slider">
+                        <span id="keyPressRequirementValue" class="slider-value">1</span>
+                    </div>
+                </div>
+                
+                <div class="config-item">
+                    <label for="treePercentage">Tree Percentage:</label>
+                    <div class="slider-container">
+                        <input type="range" id="treePercentage" min="10" max="100" value="75" step="5" class="slider">
+                        <span id="treePercentageValue" class="slider-value">75%</span>
+                    </div>
+                </div>
+                
+                <div class="config-item">
+                    <label for="burningPercentage">Initial Burning Trees:</label>
+                    <div class="slider-container">
+                        <input type="range" id="burningPercentage" min="10" max="100" value="15" step="5" class="slider">
+                        <span id="burningPercentageValue" class="slider-value">15%</span>
+                    </div>
+                </div>
+                
+                <div class="config-item toggle-item">
+                    <label for="saplingTeleport">Sapling Teleports After Pickup:</label>
+                    <label class="toggle">
+                        <input type="checkbox" id="saplingTeleport" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="preset-section">
+                <h2>Preset Templates</h2>
+                <div class="preset-buttons">
+                    <button id="presetEasy" class="preset-button easy">Eco-Friendly</button>
+                    <button id="presetMedium" class="preset-button medium">Sustainable</button>
+                    <button id="presetHard" class="preset-button hard">Drought</button>
+                    <button id="presetExtreme" class="preset-button extreme">Polluted</button>
+                </div>
+            </div>
+            
+            <div class="difficulty-meter-section">
+                <h2>Challenge Rating</h2>
+                <div class="difficulty-meter">
+                    <div class="difficulty-bar-container">
+                        <div id="difficultyBar" class="difficulty-bar"></div>
+                    </div>
+                    <div class="difficulty-labels">
+                        <span>Easy</span>
+                        <span>Medium</span>
+                        <span>Hard</span>
+                        <span>Extreme</span>
+                    </div>
+                </div>
+                <p id="difficultyDescription" class="difficulty-description">Moderate challenge - good for experienced players</p>
+            </div>
+            
+            <div class="config-buttons">
+                <button id="startGameButton" class="primary-button" onclick="location.href='../menu/custom_h.html'">Start Game</button>
+                <button id="startGameButton" class="primary-button" onclick="location.href='../menu/diff_h.html'">Return</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script src="custompick_j.js"></script>
+</body>
+</html>
