@@ -293,7 +293,7 @@ function initSettingsPage() {
     
     startGameButton.addEventListener('click', function() {
         saveSettings();
-        window.location.href = '../in game/custom.html';
+        window.location.href = '../in game/custom_h.html';
     });
     
     initializeSettings();
@@ -586,14 +586,28 @@ function initGamePage() {
     
     function showReadyScreen() {
         gameStatus = "starting";
+        
         const readySection = document.getElementById("readySection");
         const countdownSection = document.getElementById("countdownSection");
+        const countdownOverlay = document.getElementById("countdownOverlay");
+        
+        if (!readySection || !countdownSection || !countdownOverlay) {
+            console.error("Required overlay elements are missing");
+            return;
+        }
+        
         positionOverlay();
+        
         readySection.style.display = "block";
         countdownSection.style.display = "none";
         countdownOverlay.style.display = "flex";
         
         const readyButton = document.getElementById("readyButton");
+        if (!readyButton) {
+            console.error("Ready button is missing");
+            return;
+        }
+        
         const newReadyButton = readyButton.cloneNode(true);
         readyButton.parentNode.replaceChild(newReadyButton, readyButton);
         
@@ -830,7 +844,40 @@ function initGamePage() {
         }
         
         gameOverModal.style.display = "none";
+        
+        const overlay = document.getElementById("countdownOverlay");
+        const overlayParent = overlay ? overlay.parentNode : null;
+        
         initGame();
+        
+        if (overlay && !document.getElementById("countdownOverlay") && overlayParent) {
+            overlayParent.appendChild(overlay);
+            if (typeof window.setupOverlay === 'function') {
+                window.setupOverlay();
+            }
+        }
+        
+        setTimeout(() => {
+            const newOverlay = document.getElementById("countdownOverlay");
+            if (newOverlay) {
+                newOverlay.style.display = "flex";
+                const readySection = document.getElementById("readySection");
+                const countdownSection = document.getElementById("countdownSection");
+                if (readySection && countdownSection) {
+                    readySection.style.display = "block";
+                    countdownSection.style.display = "none";
+                }
+            }
+        }, 0);
+    }
+    
+    if (restartButton) {
+        restartButton.addEventListener('click', resetGame);
+    }
+    
+    if (playAgainButton) {
+        playAgainButton.onclick = null;
+        playAgainButton.addEventListener('click', resetGame);
     }
 
     document.addEventListener('keydown', handleKeyPress);
