@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Forest! - Custom Mode</title>
+    <script src="script.js"></script>
+    <script src="overlayfix.js"></script>
+    <link rel="stylesheet" href="custom_c.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-difficulty="custom">
+    <div class="particles-container">
+        <div class="particle p1"></div>
+        <div class="particle p2"></div>
+        <div class="particle p3"></div>
+        <div class="particle p4"></div>
+        <div class="particle p5"></div>
+        <div class="particle p6"></div>
+        <div class="particle p7"></div>
+        <div class="particle p8"></div>
+        
+        <div class="bubble b1"></div>
+        <div class="bubble b2"></div>
+        <div class="bubble b3"></div>
+        <div class="bubble b4"></div>
+        <div class="bubble b5"></div>
+        <div class="bubble b6"></div>
+        <div class="bubble b7"></div>
+        <div class="bubble b8"></div>
+    </div>
+    
+    <div class="forest-decoration">
+        <div class="tree tree-1"></div>
+        <div class="tree tree-2"></div>
+        <div class="tree tree-3"></div>
+    </div>
+    
+    <div class="game-container">
+        <div class="game-header">
+            <div class="game-info">
+                <div class="info-item">
+                    <span class="info-label">Trees:</span>
+                    <span id="treesCount" class="info-value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Burning:</span>
+                    <span id="burningCount" class="info-value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Sapling:</span>
+                    <span id="saplingStatus" class="info-value">❌</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Obstacles:</span>
+                    <span id="obstaclesCount" class="info-value">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="h1-custom">
+            <h1>Save the Forest! - Custom Mode</h1>
+        </div>
+
+        <div id="gameGrid" class="game-grid">
+        </div>
+        
+        <div id="gameMessage" class="game-message"></div>
+        
+        <div class="game-buttons">
+            <button id="restartButton" class="game-button">Restart</button>
+            <button id="menuButton" class="game-button" onclick="location.href='../menu/diff_h.html'">Return</button>
+        </div>
+        
+        <div id="countdownOverlay" class="countdown-overlay">
+            <div id="readySection">
+                <div class="countdown-text">Are you ready to save the forest?</div>
+                <button id="readyButton" class="game-button ready-button">Ready!</button>
+            </div>
+            <div id="countdownSection" style="display: none;">
+                <div id="countdownTimer" class="countdown-timer">3</div>
+                <div class="countdown-text">Get Ready!</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <h2 id="gameOverTitle">Game Over</h2>
+            <p id="gameOverMessage">The forest has been lost to the flames!</p>
+            <div class="modal-buttons">
+                <button id="playAgainButton" class="game-button" onclick="location.href='../in game/custompick.html'">Play Again</button>
+                <button id="returnMenuButton" class="game-button" onclick="location.href='../menu/diff_h.html'">Return</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
