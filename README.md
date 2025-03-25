@@ -43,9 +43,9 @@ JavaScript files with _j suffix contain interactive elements
 ### Credits
 This project was created as a collaborative effort by:
 
-- **Quang Tung (Cory)**- Frontend Programming & Creative Direction
-- **Manh Hung (Zoink)** - Frontend Programming & Playtesting
-- **Andrew (Nam Khanh)** - Playtesting & Creative Direction
+- **Quang Tung / Cory** - Frontend Programming & Creative Direction
+- **Manh Hung / Zoink** - Frontend Programming & Playtesting
+- **Nam Khanh / Andrew** - Playtesting & Creative Direction
 - **Claude AI** - Backend Programming & Bugfixing
 
 ### Browser Compatibility
